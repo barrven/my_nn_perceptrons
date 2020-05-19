@@ -3,14 +3,14 @@ package nn_perceptrons.classes;
 public class AndPerceptron {
     private int numInputs;
     private double[] weights;
-    private double theta;
+    private double bias;
     private double learnRate;
 
     //this constructor is used when there are known working weights (do not use for training)
-    public AndPerceptron(double[] weights, double theta, double learnRate){
+    public AndPerceptron(double[] weights, double bias, double learnRate){
         numInputs = weights.length;
         this.weights = weights;
-        this.theta = theta;
+        this.bias = bias;
         this.learnRate = learnRate;
     }
 
@@ -18,8 +18,8 @@ public class AndPerceptron {
     public AndPerceptron(double[][] trainingInputs, int[] answers, double learnRate){
         numInputs = trainingInputs[0].length;
         weights = new double[numInputs];
-        initializeWeights();
-        this.theta = Math.random()-0.5;
+        initializeWeights(); //assign random values to each weight
+        this.bias = Math.random()-0.5;
         this.learnRate = learnRate;
         train(trainingInputs, answers);
     }
@@ -27,6 +27,8 @@ public class AndPerceptron {
     private void initializeWeights(){
         for (int i = 0; i < numInputs; i++){
             weights[i] = Math.random()-0.5;
+            System.out.println("Setting weights...");
+            System.out.println("w" +i+ " --> " + weights[i]);
         }
     }
 
@@ -34,13 +36,13 @@ public class AndPerceptron {
         return weight + (learnRate * input * error);
     }
 
-    private int activate(double[] inputs, double[] weights){
+    public int activate(double[] inputs){
         double sum = 0;
         //sum the weight of all the synapses (inputs)
         for(int i = 0; i < numInputs; i++){
             sum += inputs[i] * weights[i];
         }
-        return activationFunction(sum + theta);
+        return activationFunction(sum + bias);
     }
 
     // uses step function
@@ -49,8 +51,44 @@ public class AndPerceptron {
         return 0;
     }
 
-    private void train(double[][] inputs, int[] answers){
+    private void train(double[][] trainingInputs, int[] answers){
+        int correctAnswers = 0;
+        int endCondition = answers.length;
+        int numTestCases = trainingInputs.length;
+        double[] inputs = new double[numInputs];
 
+        while(true){
+            for (int i = 0; i < numTestCases; i++){
+                for (int j = 0; j < numInputs; j++){
+                    inputs[j] = trainingInputs[i][j];
+                }
+                int result = activate(inputs);
+                int error = (answers[i] - result);
+
+                //update weights if errors are still present
+                if (error != 0){
+                    System.out.println("Updating weights and bias...");
+                    for (int w = 0; w < numInputs; w++){
+                        weights[w] = updateWeight(weights[w], inputs[w], error);
+                        System.out.println("w" +w+ " --> " +weights[w]);
+                    }
+                    bias = updateWeight(bias, 1, error);
+                    System.out.println("bias --> " +bias);
+                }
+                else{
+                    correctAnswers++;
+                }
+            }
+            if (correctAnswers == endCondition)
+                System.out.println("Training finished.");
+                return;
+        }
     }
+
+
+
+
+
+
 
 }

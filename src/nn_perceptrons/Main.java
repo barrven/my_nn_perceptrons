@@ -3,19 +3,24 @@ import nn_perceptrons.classes.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        //training data
-        double[][] tInput = new double[4][2];
-        tInput[0][0] = 0;
-        tInput[0][1] = 0;
-        tInput[1][0] = 0;
-        tInput[1][1] = 1;
-        tInput[2][0] = 1;
-        tInput[2][1] = 0;
-        tInput[3][0] = 1;
-        tInput[3][1] = 1;
-        int[] cAnswer = {0,0,0,1};
+    public static void testPerceptron(AndPerceptron ap, double[][] inputs, int[] answers){
 
-        AndPerceptron a = new AndPerceptron(tInput, cAnswer, 0.1);
+    }
+
+    public static void main(String[] args) {
+        //training data inputs
+        double[][] trainingInputs = new double[4][2];
+        trainingInputs[0][0] = 0;
+        trainingInputs[0][1] = 0;
+        trainingInputs[1][0] = 0;
+        trainingInputs[1][1] = 1;
+        trainingInputs[2][0] = 1;
+        trainingInputs[2][1] = 0;
+        trainingInputs[3][0] = 1;
+        trainingInputs[3][1] = 1;
+        // training data answers
+        int[] trainingAnswers = {0,0,0,1};
+
+        AndPerceptron a = new AndPerceptron(trainingInputs, trainingAnswers, 0.1);
     }
 }
