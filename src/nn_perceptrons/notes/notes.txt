@@ -1,0 +1,4 @@
+eventual goal:
+separate training from processing. store data in csv file
+
+first goal: organize into classes

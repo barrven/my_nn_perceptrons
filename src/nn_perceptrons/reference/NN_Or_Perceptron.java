@@ -1,31 +1,14 @@
-package nn_perceptrons;
+package nn_perceptrons.reference;
 
-
-public class NN_And_Perceptron {
-
+public class NN_Or_Perceptron {
     public static void initializeWeights(double[] weights){
         for (int x = 0; x < weights.length; x++){
             weights[x] = Math.random()-0.5;
         }
+        // weights[0]=0.3;
+        //weights[1]=-0.1;
     }
 
-    //learning happens here
-    public static double updateWeight(double weight, double input, double error, double learningRate){
-        return weight + learningRate * input * error;
-    }
-
-    //"neuron" function
-    public static int activate(double[] inputs, double[] weights, double theta){
-        double sum = 0;
-
-        //sum the weight of all the synapses (inputs)
-        for(int x = 0; x < inputs.length; x++){
-            sum += inputs[x] * weights[x];
-        }
-        return activationFunction(sum + theta);
-    }
-
-    // uses step function
     public static int activationFunction(double sum){
         if (sum >= 0){
             return 1;
@@ -33,10 +16,21 @@ public class NN_And_Perceptron {
         return 0;
     }
 
+    public static int activate(double[] inputs,double[] weights,double theta){
+        double sum = 0;
+        for(int x = 0; x < inputs.length; x++){
+            sum += inputs[x] * weights[x];
+        }
+        return activationFunction(sum + theta);
+    }
 
-    public NN_And_Perceptron() {
+    public static double updateWeight(double weight, double input, double error, double learningRate){
+        return weight + learningRate * input * error;
+    }
 
-        //training data
+
+    public NN_Or_Perceptron() {
+
         double[][] tInput = new double[4][2];
         tInput[0][0] = 0;
         tInput[0][1] = 0;
@@ -46,28 +40,27 @@ public class NN_And_Perceptron {
         tInput[2][1] = 0;
         tInput[3][0] = 1;
         tInput[3][1] = 1;
-        int[] cAnswer = {0,0,0,1};
+        int[] cAnswer = new int[]{0, 1, 1, 1};
 
         double[] weights = new double[2];
         double[] inputs = new double[2];
-        double theta = Math.random()-0.5; // is like a bias
-        double learningRate = 0.1; // hyper parameter --> determines the size of each step. if too high will overshoot
-        initializeWeights(weights);
+        double theta = 0.2; //Math.random()-0.5;
 
+        // start hyperparameters
+        double learningRate = 0.1;
+        //end hyperparameters
+
+        initializeWeights(weights);
         boolean done = false;
         int correct;
-
-        //training
         while(!done){
             correct = 0;
             for (int rows = 0; rows < 4; rows++){
                 inputs[0] = tInput[rows][0];
-                inputs[1] = tInput[rows][1];
-                int y = activate(inputs, weights, theta);
+                inputs[1]=tInput[rows][1];
+                int y = activate(inputs,weights,theta);
                 int error = cAnswer[rows]-y;
-
-                //update weights
-                if (error != 0){
+                if (error != 0){ //update weights
                     for(int w = 0; w < weights.length; w++){
                         weights[w] = updateWeight(weights[w], inputs[w], error, learningRate);
                     }
@@ -101,5 +94,3 @@ public class NN_And_Perceptron {
     }
 
 }
-
-
